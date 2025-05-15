@@ -2,16 +2,11 @@ package kelompok7.library_school.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "bukuPelajaran")
-public class BukuPelajaran {
-    @Id
-    @GeneratedValue
-    private Long id;
+public class BukuPelajaran extends Buku {
 
     @Column(nullable = false)
     private String maPel;
@@ -22,28 +17,28 @@ public class BukuPelajaran {
     @Column(nullable = false)
     private String kurikulum;
 
-    public long getid() {
-        return id;
-    }
-
-    public void setid(Long id) {
-        this.id = id;
-    }
-
-    public String getmaPel() {
+    public String getMaPel() {
         return maPel;
     }
 
-    public void setmaPel(String maPel) {
+    public void setMaPel(String maPel) {
         this.maPel = maPel;
     }
 
-    public String getkurikulum() {
+    public String getKurikulum() {
         return kurikulum;
     }
 
     public void setKurikulum(String kurikulum) {
         this.kurikulum = kurikulum;
+    }
+
+    public String getTingkatKelas() {
+        return tingkatKelas;
+    }
+
+    public void setTingkatKelas(String tingkatKelas) {
+        this.tingkatKelas = tingkatKelas;
     }
 
     

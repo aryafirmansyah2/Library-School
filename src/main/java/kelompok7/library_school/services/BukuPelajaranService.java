@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kelompok7.library_school.model.BukuPelajaran;
-import kelompok7.library_school.model.User;
 import kelompok7.library_school.repository.BukuPelajaranRepository;
-import kelompok7.library_school.repository.UserRepository;
 
 @Service
 public class BukuPelajaranService {
@@ -30,8 +28,20 @@ public class BukuPelajaranService {
 
     public BukuPelajaran update(long id, BukuPelajaran dataBuku){
         return repository.findById(id).map(bukuPelajaran ->{
-            bukuPelajaran.setmaPel(dataBuku.getmaPel());
-            bukuPelajaran.setKurikulum(dataBuku.getkurikulum());
+            bukuPelajaran.setMaPel(dataBuku.getMaPel());
+            bukuPelajaran.setKurikulum(dataBuku.getKurikulum());
+            bukuPelajaran.setMaPel(dataBuku.getMaPel());
+            bukuPelajaran.setTingkatKelas(dataBuku.getTingkatKelas());
+            bukuPelajaran.setKurikulum(dataBuku.getKurikulum());
+            bukuPelajaran.setJudul(dataBuku.getJudul());
+            bukuPelajaran.setPenulis(dataBuku.getPenulis());
+            bukuPelajaran.setPenerbit(dataBuku.getPenerbit());
+            bukuPelajaran.setTahunTerbit(dataBuku.getTahunTerbit());
+            bukuPelajaran.setDeskripsi(dataBuku.getDeskripsi());
+            bukuPelajaran.setCover(dataBuku.getCover());
+            bukuPelajaran.setHalaman(dataBuku.getHalaman());
+            bukuPelajaran.setJumlah(dataBuku.getJumlah());
+            bukuPelajaran.setAvailable(dataBuku.isAvailable());
             return repository.save(bukuPelajaran);
         }).orElseThrow();
     }

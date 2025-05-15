@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kelompok7.library_school.model.BukuPelajaran;
-import kelompok7.library_school.model.User;
 import kelompok7.library_school.services.BukuPelajaranService;
-import kelompok7.library_school.services.UserService;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,7 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("/api/BukuPelajaran")
+@RequestMapping("/api/buku-pelajaran")
 public class BukuPelajaranController {
 
     @Autowired
