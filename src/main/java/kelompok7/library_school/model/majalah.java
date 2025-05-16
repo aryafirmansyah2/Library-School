@@ -1,21 +1,25 @@
 package kelompok7.library_school.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-public class majalah {
+@Table(name = "Majalah")
+public class Majalah extends Buku {
+    
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
 
+    @Column(nullable = false)
     private String edisi;
+
+    @Column(nullable = false)
     private String frekuensiTerbit;
-
-    public Majalah() {}
-
+    
     public Long getId() {
         return id;
     }
