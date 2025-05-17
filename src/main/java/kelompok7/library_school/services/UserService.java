@@ -39,8 +39,12 @@ public class UserService{
     }).orElseThrow();
 }
 
-    //test
     public void delete(Long id) {
         repository.deleteById(id);
+    }
+
+    public User loadUserByEmail(String email) throws EmailNotFoundException{
+        User user  = repository.findByEmail(email)
+        .orElseThrow(()-> new EmailNotFoundException(email + "not found"));
     }
 }
