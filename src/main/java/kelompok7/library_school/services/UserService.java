@@ -2,10 +2,16 @@ package kelompok7.library_school.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import kelompok7.library_school.exception.EmailNotFoundException;
 import kelompok7.library_school.model.User;
 import kelompok7.library_school.repository.UserRepository;
 
@@ -42,9 +48,5 @@ public class UserService{
     public void delete(Long id) {
         repository.deleteById(id);
     }
-
-    public User loadUserByEmail(String email) throws EmailNotFoundException{
-        User user  = repository.findByEmail(email)
-        .orElseThrow(()-> new EmailNotFoundException(email + "not found"));
-    }
+    
 }
