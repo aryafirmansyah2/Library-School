@@ -26,25 +26,26 @@ public class BukuPelajaranService {
         return repository.save(bukuPelajaran);
     }
 
-    public BukuPelajaran update(long id, BukuPelajaran dataBuku){
-        return repository.findById(id).map(bukuPelajaran ->{
-            bukuPelajaran.setMaPel(dataBuku.getMaPel());
-            bukuPelajaran.setKurikulum(dataBuku.getKurikulum());
-            bukuPelajaran.setMaPel(dataBuku.getMaPel());
-            bukuPelajaran.setTingkatKelas(dataBuku.getTingkatKelas());
-            bukuPelajaran.setKurikulum(dataBuku.getKurikulum());
-            bukuPelajaran.setJudul(dataBuku.getJudul());
-            bukuPelajaran.setPenulis(dataBuku.getPenulis());
-            bukuPelajaran.setPenerbit(dataBuku.getPenerbit());
-            bukuPelajaran.setTahunTerbit(dataBuku.getTahunTerbit());
-            bukuPelajaran.setDeskripsi(dataBuku.getDeskripsi());
-            bukuPelajaran.setCover(dataBuku.getCover());
-            bukuPelajaran.setHalaman(dataBuku.getHalaman());
-            bukuPelajaran.setJumlah(dataBuku.getJumlah());
-            bukuPelajaran.setAvailable(dataBuku.isAvailable());
-            return repository.save(bukuPelajaran);
-        }).orElseThrow();
+    public BukuPelajaran update(long id, BukuPelajaran dataBuku) {
+        return repository.findById(id).map(existing -> {
+            if (dataBuku.getJudul() != null) existing.setJudul(dataBuku.getJudul());
+            if (dataBuku.getPenulis() != null) existing.setPenulis(dataBuku.getPenulis());
+            if (dataBuku.getPenerbit() != null) existing.setPenerbit(dataBuku.getPenerbit());
+            if (dataBuku.getTahunTerbit() != null) existing.setTahunTerbit(dataBuku.getTahunTerbit());
+            if (dataBuku.getDeskripsi() != null) existing.setDeskripsi(dataBuku.getDeskripsi());
+            if (dataBuku.getCover() != null) existing.setCover(dataBuku.getCover());
+            if (dataBuku.getHalaman() != 0) existing.setHalaman(dataBuku.getHalaman());
+            if (dataBuku.getJumlah() != 0) existing.setJumlah(dataBuku.getJumlah());
+            existing.setAvailable(dataBuku.isAvailable());
+    
+            if (dataBuku.getMaPel() != null) existing.setMaPel(dataBuku.getMaPel());
+            if (dataBuku.getTingkatKelas() != null) existing.setTingkatKelas(dataBuku.getTingkatKelas());
+            if (dataBuku.getKurikulum() != null) existing.setKurikulum(dataBuku.getKurikulum());
+    
+            return repository.save(existing);
+        }).orElseThrow(() -> new RuntimeException("BukuPelajaran tidak ditemukan"));
     }
+    
 
     public void delete(Long id) {
         repository.deleteById(id);

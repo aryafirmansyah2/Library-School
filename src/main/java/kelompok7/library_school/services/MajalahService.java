@@ -27,20 +27,22 @@ public class MajalahService {
     }
 
     public Majalah update(Long id, Majalah dataMajalah) {
-        return repository.findById(id).map(majalah ->{
-            majalah.setJudul(dataMajalah.getJudul());
-            majalah.setPenulis(dataMajalah.getPenulis());
-            majalah.setPenerbit(dataMajalah.getPenerbit());
-            majalah.setTahunTerbit(dataMajalah.getTahunTerbit());
-            majalah.setDeskripsi(dataMajalah.getDeskripsi());
-            majalah.setCover(dataMajalah.getCover());
-            majalah.setHalaman(dataMajalah.getHalaman());
-            majalah.setJumlah(dataMajalah.getJumlah());
-            majalah.setAvailable(dataMajalah.isAvailable());
-            majalah.setEdisi(dataMajalah.getEdisi());
-            majalah.setFrekuensiTerbit(dataMajalah.getFrekuensiTerbit());
-            return repository.save(majalah);
-        }).orElseThrow();
+        return repository.findById(id).map(existing -> {
+            if (dataMajalah.getJudul() != null) existing.setJudul(dataMajalah.getJudul());
+            if (dataMajalah.getPenulis() != null) existing.setPenulis(dataMajalah.getPenulis());
+            if (dataMajalah.getPenerbit() != null) existing.setPenerbit(dataMajalah.getPenerbit());
+            if (dataMajalah.getTahunTerbit() != null) existing.setTahunTerbit(dataMajalah.getTahunTerbit());
+            if (dataMajalah.getDeskripsi() != null) existing.setDeskripsi(dataMajalah.getDeskripsi());
+            if (dataMajalah.getCover() != null) existing.setCover(dataMajalah.getCover());
+            if (dataMajalah.getHalaman() != 0) existing.setHalaman(dataMajalah.getHalaman());
+            if (dataMajalah.getJumlah() != 0) existing.setJumlah(dataMajalah.getJumlah());
+            existing.setAvailable(dataMajalah.isAvailable());
+    
+            if (dataMajalah.getEdisi() != null) existing.setEdisi(dataMajalah.getEdisi());
+            if (dataMajalah.getFrekuensiTerbit() != null) existing.setFrekuensiTerbit(dataMajalah.getFrekuensiTerbit());
+    
+            return repository.save(existing);
+        }).orElseThrow(() -> new RuntimeException("Majalah tidak ditemukan"));
     }
 
     public void delete(Long id) {

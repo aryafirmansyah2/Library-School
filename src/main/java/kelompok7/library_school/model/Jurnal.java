@@ -3,17 +3,11 @@ package kelompok7.library_school.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 
 @Entity
 @Table(name = "jurnal")
 public class Jurnal extends Buku {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @Column(nullable = false)
     private String edisi;
@@ -58,4 +52,6 @@ public class Jurnal extends Buku {
     public void setVolume(String volume) {
         this.volume = volume;
     }
+
+    
 }
