@@ -1,7 +1,11 @@
 package kelompok7.library_school.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import kelompok7.library_school.dto.PeminjamanRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,32 +43,32 @@ public class PeminjamanController {
 
     // Endpoint buat peminjaman baru (buku didapat dari service berdasarkan bukuId)
     @PostMapping
-    public ResponseEntity<?> pinjamBuku(@RequestParam Long userId, @RequestParam Long bukuId) {
+    public ResponseEntity<?> pinjamBuku(@RequestBody PeminjamanRequest request) {
         try {
-            // Cari buku dari service, bisa BukuPelajaran, Majalah, atau Jurnal
-            Optional<Buku> bukuOpt = peminjamanService.findBukuById(bukuId);
+            Optional<Buku> bukuOpt = peminjamanService.findBukuById(request.getBukuId());
             if (bukuOpt.isEmpty()) {
-                return ResponseEntity.badRequest().body("Buku tidak ditemukan");
+                return ResponseEntity.badRequest().body(Map.of("message", "Buku tidak ditemukan"));
             }
+
             Buku buku = bukuOpt.get();
+            if (!buku.isAvailable() || buku.getJumlah() < request.getJumlahPeminjaman()) {
+                return ResponseEntity.badRequest().body(Map.of("message", "Jumlah buku tidak mencukupi"));
+            }
 
-            // Buat instance Peminjaman baru
-            Peminjaman peminjaman = new Peminjaman();
+            List<Peminjaman> peminjamanList = new ArrayList<>();
+            for (int i = 0; i < request.getJumlahPeminjaman(); i++) {
+                Peminjaman peminjaman = new Peminjaman();
+                User user = new User();
+                user.setId(request.getUserId());
+                peminjaman.setUser(user);
+                peminjaman.setBuku(buku);
 
-            // Set user (hanya set id, asumsikan User sudah ada di DB)
-            User user = new User();
-            user.setId(userId);
-            peminjaman.setUser(user);
+                peminjamanList.add(peminjamanService.create(peminjaman));
+            }
 
-            // Set buku dari hasil pencarian
-            peminjaman.setBuku(buku);
-
-            // Simpan peminjaman via service (akan handle pengurangan stok buku)
-            Peminjaman created = peminjamanService.create(peminjaman);
-
-            return ResponseEntity.ok(created);
+            return ResponseEntity.ok(Map.of("message", "Peminjaman berhasil"));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("message", "Peminjaman gagal: " + e.getMessage()));
         }
     }
 
@@ -77,6 +81,11 @@ public class PeminjamanController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/all")
+    public List<Peminjaman> getPinjam() {
+        return peminjamanService.getAll();
     }
 
     // Dapatkan semua peminjaman aktif
