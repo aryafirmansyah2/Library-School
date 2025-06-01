@@ -26,4 +26,5 @@ public interface PeminjamanService {
     Peminjaman kembalikanBuku(Long peminjamanId);
 
     Optional<Buku> findBukuById(Long id);
+
 }

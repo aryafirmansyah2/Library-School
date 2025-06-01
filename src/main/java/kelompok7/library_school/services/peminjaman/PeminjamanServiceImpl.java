@@ -35,7 +35,6 @@ public class PeminjamanServiceImpl implements PeminjamanService {
     @Autowired
     private MajalahRepository majalahRepository;
 
-
     @Override
     public List<Peminjaman> getAll() {
         return peminjamanRepository.findAll();
@@ -53,16 +52,15 @@ public class PeminjamanServiceImpl implements PeminjamanService {
                 .orElseThrow(() -> new RuntimeException("Buku tidak ditemukan"));
 
         if (!buku.isAvailable() || buku.getJumlah() <= 0) {
-            throw new RuntimeException("Buku tidak tersedia untuk dipinjam");
+            throw new RuntimeException("Buku tidak tersedia");
         }
 
-        // Kurangi jumlah buku
         buku.setJumlah(buku.getJumlah() - 1);
         if (buku.getJumlah() == 0) {
             buku.setAvailable(false);
         }
 
-        // Simpan perubahan ke repository masing-masing tipe buku
+        // Simpan perubahan buku berdasarkan tipe
         if (buku instanceof BukuPelajaran) {
             bukuPelajaranRepository.save((BukuPelajaran) buku);
         } else if (buku instanceof Jurnal) {
@@ -72,7 +70,9 @@ public class PeminjamanServiceImpl implements PeminjamanService {
         }
 
         peminjaman.setTanggalPeminjaman(LocalDate.now());
+        peminjaman.setTanggalPengembalian(LocalDate.now().plusDays(7));
         peminjaman.setSudahDikembalikan(false);
+
         return peminjamanRepository.save(peminjaman);
     }
 
