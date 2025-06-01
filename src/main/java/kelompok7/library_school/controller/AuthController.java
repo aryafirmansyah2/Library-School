@@ -1,5 +1,8 @@
 package kelompok7.library_school.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +42,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
@@ -48,7 +51,25 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = jwtGenerator.generateToken(authentication);
-        return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
+
+        User user = userRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Buat map untuk user
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("email", user.getEmail());
+        userMap.put("namaDepan", user.getNamaDepan());
+        userMap.put("namaBelakang", user.getNamaBelakang());
+        userMap.put("role", user.getRole());
+        userMap.put("kelas", user.getKelas());
+        userMap.put("noHp", user.getNoHp());
+
+        // Buat map utama untuk response
+        Map<String, Object> response = new HashMap<>();
+        response.put("accessToken", token);
+        response.put("user", userMap);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/register")
