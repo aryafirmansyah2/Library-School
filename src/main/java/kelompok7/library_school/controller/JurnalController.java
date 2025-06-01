@@ -31,9 +31,14 @@ public class JurnalController {
 
     // Get all journals
     @GetMapping()
-    public List<Jurnal> getAllJurnals() {
-        return service.getAll();
+    public List<Jurnal> getJurnal(@RequestParam(value = "keyword", required = false) String keyword) {
+        if (keyword == null || keyword.isEmpty()) {
+            return service.getAll();
+        } else {
+            return service.searchByJudul(keyword);
+        }
     }
+
 
     // Get journal by ID
     @GetMapping("/{id}")
