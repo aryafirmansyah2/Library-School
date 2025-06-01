@@ -30,9 +30,14 @@ public class MajalahController {
     private MajalahService service;
 
     @GetMapping()
-    public List<Majalah> getAllMajalah() {
-        return service.getAll();
+    public List<Majalah> getMajalah(@RequestParam(value = "keyword", required = false) String keyword) {
+        if (keyword == null || keyword.isEmpty()) {
+            return service.getAll();
+        } else {
+            return service.searchByJudul(keyword);
+        }
     }
+
 
     @GetMapping("/{id}")
     public Majalah getMajalahById(@PathVariable Long id) {
