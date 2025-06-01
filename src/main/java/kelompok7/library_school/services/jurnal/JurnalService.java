@@ -1,4 +1,4 @@
-package kelompok7.library_school.services;
+package kelompok7.library_school.services.jurnal;
 
 import java.util.List;
 import java.util.Optional;

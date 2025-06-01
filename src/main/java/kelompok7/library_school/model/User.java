@@ -14,16 +14,16 @@ public class User {
     private Long id;
 
     @Column(nullable = false)
-    private String nama_depan;
+    private String namaDepan;
 
     @Column(nullable = false)
-    private String nama_belakang;
+    private String namaBelakang;
 
     @Column(nullable = false)
     private String kelas;
 
     @Column(nullable = false, unique = true)
-    private String no_hp;
+    private String noHp;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -34,28 +34,28 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-    public Long getid() {
+    public Long getId() {
         return id;
     }
 
-    public void setid(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getNama_depan() {
-        return nama_depan;
+    public String getNamaDepan() {
+        return namaDepan;
     }
 
-    public void setNama_depan(String nama_depan) {
-        this.nama_depan = nama_depan;
+    public void setNamaDepan(String namaDepan) {
+        this.namaDepan = namaDepan;
     }
 
-    public String getNama_belakang() {
-        return nama_belakang;
+    public String getNamaBelakang() {
+        return namaBelakang;
     }
 
-    public void setNama_belakang(String nama_belakang) {
-        this.nama_belakang = nama_belakang;
+    public void setNamaBelakang(String namaBelakang) {
+        this.namaBelakang = namaBelakang;
     }
 
     public String getKelas() {
@@ -66,12 +66,12 @@ public class User {
         this.kelas = kelas;
     }
 
-    public String getNo_hp() {
-        return no_hp;
+    public String getNoHp() {
+        return noHp;
     }
 
-    public void setNo_hp(String no_hp) {
-        this.no_hp = no_hp;
+    public void setNoHp(String noHp) {
+        this.noHp = noHp;
     }
 
     public String getEmail() {
@@ -97,6 +97,9 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
+
+    
+    
 
     
 }

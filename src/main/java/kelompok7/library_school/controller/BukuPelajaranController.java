@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import kelompok7.library_school.model.BukuPelajaran;
-import kelompok7.library_school.services.BukuPelajaranService;
+import kelompok7.library_school.services.buku_pelajaran.BukuPelajaranService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -29,8 +30,13 @@ public class BukuPelajaranController {
     private BukuPelajaranService service;
 
     @GetMapping()
-    public List<BukuPelajaran> getAllBukuPelajarans() {
-        return service.getAll();
+    public List<BukuPelajaran> getBukuPelajaran(
+            @RequestParam(value = "keyword", required = false) String keyword) {
+        if (keyword == null || keyword.isEmpty()) {
+            return service.getAll();
+        } else {
+            return service.searchByKeyword(keyword);
+        }
     }
 
     @GetMapping("/{id}")
@@ -73,7 +79,11 @@ public class BukuPelajaranController {
             buku.setCover("/uploads/buku_pelajaran/" + fileName);
 
             BukuPelajaran saved = service.create(buku);
-            return ResponseEntity.ok(saved);
+            return ResponseEntity
+                    .ok()
+                    .header("Content-Type", "application/json")
+                    .body(saved);
+
         } catch (IOException e) {
             return ResponseEntity.internalServerError().build();
         }

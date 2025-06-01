@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import kelompok7.library_school.model.Majalah;
-import kelompok7.library_school.services.MajalahService;
+import kelompok7.library_school.services.majalah.MajalahService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;

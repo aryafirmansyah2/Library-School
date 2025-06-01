@@ -60,10 +60,10 @@ public class AuthController {
         User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        user.setNama_depan(registerRequest.getNamaDepan());
-        user.setNama_belakang(registerRequest.getNamaBelakang());
+        user.setNamaDepan(registerRequest.getNamaDepan());
+        user.setNamaBelakang(registerRequest.getNamaBelakang());
         user.setKelas(registerRequest.getKelas());
-        user.setNo_hp(registerRequest.getNoHP());
+        user.setNoHp(registerRequest.getNoHP());
         user.setRole("USER");
 
         userRepository.save(user);

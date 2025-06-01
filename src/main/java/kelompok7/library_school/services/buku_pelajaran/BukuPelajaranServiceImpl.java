@@ -1,4 +1,4 @@
-package kelompok7.library_school.services;
+package kelompok7.library_school.services.buku_pelajaran;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,9 +9,10 @@ import org.springframework.stereotype.Service;
 import kelompok7.library_school.model.BukuPelajaran;
 import kelompok7.library_school.repository.BukuPelajaranRepository;
 
+
 @Service
-public class BukuPelajaranService {
-    @Autowired
+public class BukuPelajaranServiceImpl implements BukuPelajaranService{
+     @Autowired
     private BukuPelajaranRepository repository;
 
     public List<BukuPelajaran> getAll() {
@@ -51,4 +52,8 @@ public class BukuPelajaranService {
         repository.deleteById(id);
     }
 
+    @Override
+    public List<BukuPelajaran> searchByKeyword(String keyword) {
+        return repository.findByJudulContainingIgnoreCaseOrMaPelContainingIgnoreCase(keyword, keyword);
+    }
 }

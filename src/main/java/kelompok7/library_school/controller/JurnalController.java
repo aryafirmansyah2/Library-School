@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import kelompok7.library_school.model.Jurnal;
-import kelompok7.library_school.services.JurnalService;
+import kelompok7.library_school.services.jurnal.JurnalService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -143,7 +144,9 @@ public class JurnalController {
                 if (frekuensiTerbit != null)
                     existing.setFrekuensiTerbit(frekuensiTerbit);
                 if (bidang != null)
-                    existing.setBidang(bidang);;
+                    existing.setBidang(bidang);
+                if (volume != null)
+                    existing.setVolume(volume);
     
                 Jurnal updated = service.create(existing);
                 return ResponseEntity.ok(updated);

@@ -1,0 +1,159 @@
+Folder PATH listing for volume New Volume
+Volume serial number is 0639-3895
+D:.
+¦   .gitattributes
+¦   .gitignore
+¦   compose.yaml
+¦   HELP.md
+¦   hs_err_pid4080.log
+¦   mvnw
+¦   mvnw.cmd
+¦   pom.xml
+¦   README.md
+¦   replay_pid4080.log
+¦   structure.txt
+¦   
++---.mvn
+¦   +---wrapper
+¦           maven-wrapper.properties
+¦           
++---public
+¦   +---uploads
+¦       +---buku_pelajaran
+¦       ¦       1748513203820_c188f726-b936-80e85a-5ac4a3f2-a3f2c76f6e-c76f6ea1.jpg
+¦       ¦       1748668796610_decor1.png
+¦       ¦       1748669940095_decor1.png
+¦       ¦       
+¦       +---jurnal
+¦       ¦       1748520470249_WhatsApp Image 2025-05-29 at 19.07.24_9ff34e60.jpg
+¦       ¦       1748670868984_decor1.png
+¦       ¦       
+¦       +---majalah
+¦               1748518530748_c188f726-b936-80e85a-5ac4a3f2-a3f2c76f6e-c76f6ea1.jpg
+¦               1748518661501_otomotif-a_6836b503da9cc483132812.jpg
+¦               1748670688133_decor1.png
+¦               
++---src
+¦   +---main
+¦   ¦   +---java
+¦   ¦   ¦   +---kelompok7
+¦   ¦   ¦       +---library_school
+¦   ¦   ¦           ¦   LibrarySchoolApplication.java
+¦   ¦   ¦           ¦   
+¦   ¦   ¦           +---config
+¦   ¦   ¦           ¦       CustomUserDetailsService.java
+¦   ¦   ¦           ¦       JWTAuthenticationFilter.java
+¦   ¦   ¦           ¦       JwtAuthEntryPoint.java
+¦   ¦   ¦           ¦       JWTGenerator.java
+¦   ¦   ¦           ¦       SecurityConfig.java
+¦   ¦   ¦           ¦       SecurityConstants.java
+¦   ¦   ¦           ¦       WebConfig.java
+¦   ¦   ¦           ¦       
+¦   ¦   ¦           +---controller
+¦   ¦   ¦           ¦       AuthController.java
+¦   ¦   ¦           ¦       BukuPelajaranController.java
+¦   ¦   ¦           ¦       JurnalController.java
+¦   ¦   ¦           ¦       MajalahController.java
+¦   ¦   ¦           ¦       UserController.java
+¦   ¦   ¦           ¦       
+¦   ¦   ¦           +---dto
+¦   ¦   ¦           ¦       AuthResponseDTO.java
+¦   ¦   ¦           ¦       BukuPelajaranUpdateDTO.java
+¦   ¦   ¦           ¦       LoginRequest.java
+¦   ¦   ¦           ¦       RegisterRequest.java
+¦   ¦   ¦           ¦       UserUpdateRequest.java
+¦   ¦   ¦           ¦       
+¦   ¦   ¦           +---model
+¦   ¦   ¦           ¦       Buku.java
+¦   ¦   ¦           ¦       BukuPelajaran.java
+¦   ¦   ¦           ¦       Jurnal.java
+¦   ¦   ¦           ¦       Majalah.java
+¦   ¦   ¦           ¦       User.java
+¦   ¦   ¦           ¦       
+¦   ¦   ¦           +---repository
+¦   ¦   ¦           ¦       BukuPelajaranRepository.java
+¦   ¦   ¦           ¦       JurnalRepository.java
+¦   ¦   ¦           ¦       MajalahRepository.java
+¦   ¦   ¦           ¦       UserRepository.java
+¦   ¦   ¦           ¦       
+¦   ¦   ¦           +---services
+¦   ¦   ¦                   BukuPelajaranService.java
+¦   ¦   ¦                   JurnalService.java
+¦   ¦   ¦                   MajalahService.java
+¦   ¦   ¦                   UserService.java
+¦   ¦   ¦                   
+¦   ¦   +---resources
+¦   ¦       ¦   application.properties
+¦   ¦       ¦   
+¦   ¦       +---META-INF
+¦   ¦       +---static
+¦   ¦       +---templates
+¦   +---test
+¦       +---java
+¦           +---kelompok7
+¦               +---library_school
+¦                       LibrarySchoolApplicationTests.java
+¦                       TestcontainersConfiguration.java
+¦                       TestLibrarySchoolApplication.java
+¦                       
++---target
+    +---classes
+    ¦   ¦   application.properties
+    ¦   ¦   
+    ¦   +---kelompok7
+    ¦       +---library_school
+    ¦           ¦   LibrarySchoolApplication.class
+    ¦           ¦   
+    ¦           +---config
+    ¦           ¦       CustomUserDetailsService.class
+    ¦           ¦       JWTAuthenticationFilter.class
+    ¦           ¦       JwtAuthEntryPoint.class
+    ¦           ¦       JWTGenerator.class
+    ¦           ¦       SecurityConfig.class
+    ¦           ¦       SecurityConstants.class
+    ¦           ¦       WebConfig.class
+    ¦           ¦       
+    ¦           +---controller
+    ¦           ¦       AuthController.class
+    ¦           ¦       BukuPelajaranController.class
+    ¦           ¦       JurnalController.class
+    ¦           ¦       MajalahController.class
+    ¦           ¦       UserController.class
+    ¦           ¦       
+    ¦           +---dto
+    ¦           ¦       AuthResponseDTO.class
+    ¦           ¦       BukuPelajaranUpdateDTO.class
+    ¦           ¦       LoginRequest.class
+    ¦           ¦       RegisterRequest.class
+    ¦           ¦       UserUpdateRequest.class
+    ¦           ¦       
+    ¦           +---model
+    ¦           ¦       Buku.class
+    ¦           ¦       BukuPelajaran.class
+    ¦           ¦       Jurnal.class
+    ¦           ¦       Majalah.class
+    ¦           ¦       User.class
+    ¦           ¦       
+    ¦           +---repository
+    ¦           ¦       BukuPelajaranRepository.class
+    ¦           ¦       JurnalRepository.class
+    ¦           ¦       MajalahRepository.class
+    ¦           ¦       UserRepository.class
+    ¦           ¦       
+    ¦           +---services
+    ¦                   BukuPelajaranService.class
+    ¦                   JurnalService.class
+    ¦                   MajalahService.class
+    ¦                   UserService.class
+    ¦                   
+    +---generated-sources
+    ¦   +---annotations
+    +---generated-test-sources
+    ¦   +---test-annotations
+    +---test-classes
+        +---kelompok7
+            +---library_school
+                    LibrarySchoolApplicationTests.class
+                    TestcontainersConfiguration.class
+                    TestLibrarySchoolApplication.class
+                    
