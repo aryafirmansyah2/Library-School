@@ -1,31 +1,26 @@
 package kelompok7.library_school.dto;
 
+import java.util.List;
+
 public class PeminjamanRequest {
     private Long userId;
-    private Long bukuId;
-    private int jumlahPeminjaman;
+    private List<BukuPinjamRequest> bukuList;
 
+    // Getters and setters
     public Long getUserId() {
         return userId;
-    }
-
-    public int getJumlahPeminjaman() {
-        return jumlahPeminjaman;
-    }
-
-    public void setJumlahPeminjaman(int jumlahPeminjaman) {
-        this.jumlahPeminjaman = jumlahPeminjaman;
     }
 
     public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public Long getBukuId() {
-        return bukuId;
+    public List<BukuPinjamRequest> getBukuList() {
+        return bukuList;
     }
 
-    public void setBukuId(Long bukuId) {
-        this.bukuId = bukuId;
+    public void setBukuList(List<BukuPinjamRequest> bukuList) {
+        this.bukuList = bukuList;
     }
+
 }

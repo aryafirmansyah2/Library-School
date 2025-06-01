@@ -1,10 +1,12 @@
 package kelompok7.library_school.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import kelompok7.library_school.dto.BukuPinjamRequest;
 import kelompok7.library_school.dto.PeminjamanRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,32 +45,55 @@ public class PeminjamanController {
 
     // Endpoint buat peminjaman baru (buku didapat dari service berdasarkan bukuId)
     @PostMapping
-    public ResponseEntity<?> pinjamBuku(@RequestBody PeminjamanRequest request) {
+    public ResponseEntity<?> pinjamBanyakBuku(@RequestBody PeminjamanRequest request) {
         try {
-            Optional<Buku> bukuOpt = peminjamanService.findBukuById(request.getBukuId());
-            if (bukuOpt.isEmpty()) {
-                return ResponseEntity.badRequest().body(Map.of("message", "Buku tidak ditemukan"));
+            User user = new User();
+            user.setId(request.getUserId());
+
+            List<String> gagal = new ArrayList<>();
+            List<Peminjaman> berhasil = new ArrayList<>();
+
+            for (BukuPinjamRequest bpr : request.getBukuList()) {
+                Optional<Buku> bukuOpt = peminjamanService.findBukuById(bpr.getBukuId());
+                if (bukuOpt.isEmpty()) {
+                    gagal.add("Buku ID " + bpr.getBukuId() + " tidak ditemukan");
+                    continue;
+                }
+
+                Buku buku = bukuOpt.get();
+
+                if (!buku.isAvailable() || buku.getJumlah() < bpr.getJumlah()) {
+                    gagal.add("Buku '" + buku.getJudul() + "' tidak cukup tersedia. Diminta: " + bpr.getJumlah()
+                            + ", tersedia: " + buku.getJumlah());
+                    continue;
+                }
+
+                for (int i = 0; i < bpr.getJumlah(); i++) {
+                    Peminjaman peminjaman = new Peminjaman();
+                    peminjaman.setUser(user);
+                    peminjaman.setBuku(buku);
+                    berhasil.add(peminjamanService.create(peminjaman));
+                }
             }
 
-            Buku buku = bukuOpt.get();
-            if (!buku.isAvailable() || buku.getJumlah() < request.getJumlahPeminjaman()) {
-                return ResponseEntity.badRequest().body(Map.of("message", "Jumlah buku tidak mencukupi"));
+            if (berhasil.isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "message", "Peminjaman gagal",
+                        "gagal", gagal));
             }
 
-            List<Peminjaman> peminjamanList = new ArrayList<>();
-            for (int i = 0; i < request.getJumlahPeminjaman(); i++) {
-                Peminjaman peminjaman = new Peminjaman();
-                User user = new User();
-                user.setId(request.getUserId());
-                peminjaman.setUser(user);
-                peminjaman.setBuku(buku);
-
-                peminjamanList.add(peminjamanService.create(peminjaman));
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Peminjaman berhasil");
+            response.put("totalDipinjam", berhasil.size());
+            if (!gagal.isEmpty()) {
+                response.put("gagal", gagal);
             }
+            return ResponseEntity.ok(response);
 
-            return ResponseEntity.ok(Map.of("message", "Peminjaman berhasil"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Peminjaman gagal: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "message", "Peminjaman gagal",
+                    "error", e.getMessage()));
         }
     }
 
