@@ -1,6 +1,7 @@
 package kelompok7.library_school.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,10 +102,16 @@ public class PeminjamanController {
     @PutMapping("/kembalikan/{peminjamanId}")
     public ResponseEntity<?> kembalikanBuku(@PathVariable Long peminjamanId) {
         try {
-            Peminjaman updated = peminjamanService.kembalikanBuku(peminjamanId);
-            return ResponseEntity.ok(updated);
+            // Jalankan service, tapi jangan kembalikan hasilnya
+            peminjamanService.kembalikanBuku(peminjamanId);
+
+            // Kembalikan hanya message sukses
+            return ResponseEntity.ok(
+                    Collections.singletonMap("message", "Buku berhasil dikembalikan."));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            // Kembalikan hanya message gagal
+            return ResponseEntity.badRequest().body(
+                    Collections.singletonMap("message", "Gagal mengembalikan buku: " + e.getMessage()));
         }
     }
 
