@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import kelompok7.library_school.dto.BukuPinjamRequest;
 import kelompok7.library_school.dto.PeminjamanRequest;
+import kelompok7.library_school.dto.BukuStatusResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -115,7 +116,7 @@ public class PeminjamanController {
         }
     }
 
-    @GetMapping("/all")
+    @GetMapping()
     public List<Peminjaman> getPinjam() {
         return peminjamanService.getAll();
     }
@@ -136,42 +137,5 @@ public class PeminjamanController {
     @GetMapping("/buku/{bukuId}")
     public List<Peminjaman> getByBuku(@PathVariable Long bukuId) {
         return peminjamanService.getByBukuId(bukuId);
-    }
-
-    // DTO response untuk status buku
-    private static class BukuStatusResponse {
-        private Long id;
-        private String judul;
-        private boolean tersedia;
-        private int jumlahTersedia;
-        private long jumlahDipinjam;
-
-        public BukuStatusResponse(Long id, String judul, boolean tersedia, int jumlahTersedia, long jumlahDipinjam) {
-            this.id = id;
-            this.judul = judul;
-            this.tersedia = tersedia;
-            this.jumlahTersedia = jumlahTersedia;
-            this.jumlahDipinjam = jumlahDipinjam;
-        }
-
-        public Long getId() {
-            return id;
-        }
-
-        public String getJudul() {
-            return judul;
-        }
-
-        public boolean isTersedia() {
-            return tersedia;
-        }
-
-        public int getJumlahTersedia() {
-            return jumlahTersedia;
-        }
-
-        public long getJumlahDipinjam() {
-            return jumlahDipinjam;
-        }
     }
 }
