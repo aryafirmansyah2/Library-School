@@ -52,7 +52,7 @@ public class PeminjamanServiceImpl implements PeminjamanService {
                 .orElseThrow(() -> new RuntimeException("Buku tidak ditemukan"));
 
         if (!buku.isAvailable() || buku.getJumlah() <= 0) {
-            throw new RuntimeException("Buku tidak tersedia");
+            throw new RuntimeException("Buku tidak tersedia untuk dipinjam");
         }
 
         buku.setJumlah(buku.getJumlah() - 1);
@@ -60,7 +60,7 @@ public class PeminjamanServiceImpl implements PeminjamanService {
             buku.setAvailable(false);
         }
 
-        // Simpan perubahan buku berdasarkan tipe
+        // Simpan ke repository yang sesuai
         if (buku instanceof BukuPelajaran) {
             bukuPelajaranRepository.save((BukuPelajaran) buku);
         } else if (buku instanceof Jurnal) {
@@ -70,9 +70,8 @@ public class PeminjamanServiceImpl implements PeminjamanService {
         }
 
         peminjaman.setTanggalPeminjaman(LocalDate.now());
-        peminjaman.setTanggalPengembalian(LocalDate.now().plusDays(7));
+        peminjaman.setTanggalPengembalian(LocalDate.now().plusDays(7)); // otomatis seminggu dari sekarang
         peminjaman.setSudahDikembalikan(false);
-
         return peminjamanRepository.save(peminjaman);
     }
 

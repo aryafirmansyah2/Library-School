@@ -1,11 +1,15 @@
 package kelompok7.library_school.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import kelompok7.library_school.dto.BukuPinjamRequest;
 import kelompok7.library_school.dto.PeminjamanRequest;
+import kelompok7.library_school.dto.BukuStatusResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,32 +47,55 @@ public class PeminjamanController {
 
     // Endpoint buat peminjaman baru (buku didapat dari service berdasarkan bukuId)
     @PostMapping
-    public ResponseEntity<?> pinjamBuku(@RequestBody PeminjamanRequest request) {
+    public ResponseEntity<?> pinjamBanyakBuku(@RequestBody PeminjamanRequest request) {
         try {
-            Optional<Buku> bukuOpt = peminjamanService.findBukuById(request.getBukuId());
-            if (bukuOpt.isEmpty()) {
-                return ResponseEntity.badRequest().body(Map.of("message", "Buku tidak ditemukan"));
+            User user = new User();
+            user.setId(request.getUserId());
+
+            List<String> gagal = new ArrayList<>();
+            List<Peminjaman> berhasil = new ArrayList<>();
+
+            for (BukuPinjamRequest bpr : request.getBukuList()) {
+                Optional<Buku> bukuOpt = peminjamanService.findBukuById(bpr.getBukuId());
+                if (bukuOpt.isEmpty()) {
+                    gagal.add("Buku ID " + bpr.getBukuId() + " tidak ditemukan");
+                    continue;
+                }
+
+                Buku buku = bukuOpt.get();
+
+                if (!buku.isAvailable() || buku.getJumlah() < bpr.getJumlah()) {
+                    gagal.add("Buku '" + buku.getJudul() + "' tidak cukup tersedia. Diminta: " + bpr.getJumlah()
+                            + ", tersedia: " + buku.getJumlah());
+                    continue;
+                }
+
+                for (int i = 0; i < bpr.getJumlah(); i++) {
+                    Peminjaman peminjaman = new Peminjaman();
+                    peminjaman.setUser(user);
+                    peminjaman.setBuku(buku);
+                    berhasil.add(peminjamanService.create(peminjaman));
+                }
             }
 
-            Buku buku = bukuOpt.get();
-            if (!buku.isAvailable() || buku.getJumlah() < request.getJumlahPeminjaman()) {
-                return ResponseEntity.badRequest().body(Map.of("message", "Jumlah buku tidak mencukupi"));
+            if (berhasil.isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "message", "Peminjaman gagal",
+                        "gagal", gagal));
             }
 
-            List<Peminjaman> peminjamanList = new ArrayList<>();
-            for (int i = 0; i < request.getJumlahPeminjaman(); i++) {
-                Peminjaman peminjaman = new Peminjaman();
-                User user = new User();
-                user.setId(request.getUserId());
-                peminjaman.setUser(user);
-                peminjaman.setBuku(buku);
-
-                peminjamanList.add(peminjamanService.create(peminjaman));
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Peminjaman berhasil");
+            response.put("totalDipinjam", berhasil.size());
+            if (!gagal.isEmpty()) {
+                response.put("gagal", gagal);
             }
+            return ResponseEntity.ok(response);
 
-            return ResponseEntity.ok(Map.of("message", "Peminjaman berhasil"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Peminjaman gagal: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "message", "Peminjaman gagal",
+                    "error", e.getMessage()));
         }
     }
 
@@ -76,14 +103,20 @@ public class PeminjamanController {
     @PutMapping("/kembalikan/{peminjamanId}")
     public ResponseEntity<?> kembalikanBuku(@PathVariable Long peminjamanId) {
         try {
-            Peminjaman updated = peminjamanService.kembalikanBuku(peminjamanId);
-            return ResponseEntity.ok(updated);
+            // Jalankan service, tapi jangan kembalikan hasilnya
+            peminjamanService.kembalikanBuku(peminjamanId);
+
+            // Kembalikan hanya message sukses
+            return ResponseEntity.ok(
+                    Collections.singletonMap("message", "Buku berhasil dikembalikan."));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            // Kembalikan hanya message gagal
+            return ResponseEntity.badRequest().body(
+                    Collections.singletonMap("message", "Gagal mengembalikan buku: " + e.getMessage()));
         }
     }
 
-    @GetMapping("/all")
+    @GetMapping()
     public List<Peminjaman> getPinjam() {
         return peminjamanService.getAll();
     }
@@ -104,42 +137,5 @@ public class PeminjamanController {
     @GetMapping("/buku/{bukuId}")
     public List<Peminjaman> getByBuku(@PathVariable Long bukuId) {
         return peminjamanService.getByBukuId(bukuId);
-    }
-
-    // DTO response untuk status buku
-    private static class BukuStatusResponse {
-        private Long id;
-        private String judul;
-        private boolean tersedia;
-        private int jumlahTersedia;
-        private long jumlahDipinjam;
-
-        public BukuStatusResponse(Long id, String judul, boolean tersedia, int jumlahTersedia, long jumlahDipinjam) {
-            this.id = id;
-            this.judul = judul;
-            this.tersedia = tersedia;
-            this.jumlahTersedia = jumlahTersedia;
-            this.jumlahDipinjam = jumlahDipinjam;
-        }
-
-        public Long getId() {
-            return id;
-        }
-
-        public String getJudul() {
-            return judul;
-        }
-
-        public boolean isTersedia() {
-            return tersedia;
-        }
-
-        public int getJumlahTersedia() {
-            return jumlahTersedia;
-        }
-
-        public long getJumlahDipinjam() {
-            return jumlahDipinjam;
-        }
     }
 }
