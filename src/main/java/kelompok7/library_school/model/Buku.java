@@ -28,7 +28,7 @@ public abstract class Buku {
     @Column(nullable = false)
     private String tahunTerbit;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String deskripsi;
 
     @Column(nullable = false)
