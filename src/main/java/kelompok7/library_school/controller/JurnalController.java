@@ -61,6 +61,11 @@ public class JurnalController {
             @RequestParam("bidang") String bidang,
             @RequestParam("volume") String volume) {
         try {
+
+            if (file.getSize() > 2 * 1024 * 1024) { // 2MB
+                return ResponseEntity.badRequest().body(null); // Bisa ubah dengan pesan error
+            }
+            
             String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
             Path uploadPath = Paths.get("public", "uploads", "jurnal");
             Files.createDirectories(uploadPath);
