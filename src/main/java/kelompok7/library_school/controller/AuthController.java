@@ -42,35 +42,38 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()));
+public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
+    Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                    loginRequest.getEmail(),
+                    loginRequest.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+    SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token = jwtGenerator.generateToken(authentication);
+    String token = jwtGenerator.generateToken(authentication);
 
-        User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    User user = userRepository.findByEmail(loginRequest.getEmail())
+            .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Buat map untuk user
-        Map<String, Object> userMap = new HashMap<>();
-        userMap.put("email", user.getEmail());
-        userMap.put("namaDepan", user.getNamaDepan());
-        userMap.put("namaBelakang", user.getNamaBelakang());
-        userMap.put("role", user.getRole());
-        userMap.put("kelas", user.getKelas());
-        userMap.put("noHp", user.getNoHp());
+    // Buat map untuk user
+    Map<String, Object> userMap = new HashMap<>();
+    userMap.put("id", user.getId());
+    userMap.put("email", user.getEmail());
+    userMap.put("namaDepan", user.getNamaDepan());
+    userMap.put("namaBelakang", user.getNamaBelakang());
+    userMap.put("role", user.getRole());
+    userMap.put("kelas", user.getKelas());
+    userMap.put("noHp", user.getNoHp());
 
-        // Buat map utama untuk response
-        Map<String, Object> response = new HashMap<>();
-        response.put("accessToken", token);
-        response.put("user", userMap);
+    // Buat map utama untuk response
+    Map<String, Object> response = new HashMap<>();
+    response.put("accessToken", token);
+    response.put("userId", user.getId()); // ✅ Tambahan: ID di root-level response
+    response.put("user", userMap);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+    return new ResponseEntity<>(response, HttpStatus.OK);
+}
+
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
